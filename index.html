@@ -460,7 +460,7 @@ body {
     this.build = function(){
         var newPackage = {
             "name" : this.name || "App 1",
-            "layout" : this.layout || "",
+            "layout" : this.layout || "", // Put a logo here
             "scripts" : this.scripts || "",
             "styles" : this.styles || "",
             "icon" : this.icon || ""
@@ -551,14 +551,7 @@ body {
         close();
     });
     // Exit Boot
-    
     lock();
-    
-    /*
-        // Notes to User;
-        
-        
-    */
     var example = new Application();
     example.name = "The Coding Master";
     example.layout = "<h1>The Coding Master</h1><p>Cool, right?</p><blockquote style=\"background-color: blue;border-left: 2px solid orange;color: green\">Simple blockquote</blockquote>";
