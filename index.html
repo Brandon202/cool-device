@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+        <title>Page Title</title>
+        <style>
+            * {
+    font-family: arial;
+}
+body {
+    margin: 0;
+    background: #333;
+}
+#notifBar {
+    height: 15px;
+    width: calc(100% - 10px);
+    padding: 5px;
+    font-size: 11pt;
+    color: #FFF;
+    background: #111;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: filter 1s ease;
+}
+#clock {
+    float: right;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#homeScn {
+    height: calc(100% - 25px);
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    background: radial-gradient(#555, #333);
+    transition: filter 1s ease;
+}
+#window {
+    height: calc(100% - 25px) !important;
+    width: 100vw !important;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    transition: filter 1s ease;
+    background: #333;
+    color: #FFF;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#window p, #creator p{
+    width: calc(100% - 30px);
+    padding: 15px;
+}
+#window blockquote {
+    margin-left: 15px;
+    width: calc(100% - 60px);
+    padding: 15px;
+    border-left: solid 3px #AAA;
+    background: #555;
+}
+#window h1, #creator h1{
+    border-bottom: solid 3px #FFF;
+    width: calc(100% - 60px);
+    padding: 15px;
+    margin-left: 15px;
+}
+#window hr, #creator hr{
+    width: calc(100% - 30px);
+    margin-left: 15px;
+    border: none;
+    background: #FFF;
+    height: 3px;
+}
+#lockscn {
+    height: 100vh;
+    width: 100vw;
+    background: transparent;
+    opacity: .7;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+#clock2 {
+    font-size: 45pt;
+    font-weight: lighter;
+    color: #FFF;
+    text-align: center;
+    width: 80vw;
+    position: absolute;
+    left: 10vw;
+    top: calc(50% - 45pt);
+}
+#unlock {
+    width: calc(80% - 30px);
+    background: transparent;
+    color: #FFF;
+    font-size: 20pt;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 10vw;
+    left: 10vw;
+    border: solid 1px #555;
+    box-shadow: 1px 1px 1px #FFF inset;
+    padding: 15px;
+    transition: background .5s ease;
+    cursor: pointer;
+}
+#unlock:active {
+    background: #AAA;
+}
+#access {
+    height: 50px;
+    width: 80vw;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    position: absolute;
+    left: 10vw;
+    top: 10vh;
+    border-radius: 5px;
+    background: transparent;
+    border: solid 1px #555;
+    box-shadow: 1px 1px 1px #FFF inset;
+    opacity: .7;
+}
+.accessItem {
+    width: 25%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: #FFF;
+    background: transparent;
+    transition: background .5s ease;
+    cursor: pointer;
+}
+.accessItem:active {
+    background: #AAA;
+}
+.accessIcon {
+    display: inline;
+    width: 35px;
+    height: 35px;
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+    -moz-filter: invert(100%);
+    -ms-filter: invert(100%);
+}
+#home {
+    opacity: .7;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: solid 1px #555;
+    box-shadow: 1px 1px 1px #FFF inset;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .5s ease;
+    position: fixed;
+    left: calc(50% - 25px);
+    bottom: 5px;
+}
+#home:active {
+    background: #AAA;
+}
+#homeOpt {
+    width: 100vw;
+    height: 60px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: transparent;
+}
+#goBack, #goHome, #goLock {
+    opacity: .7;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: solid 1px #555;
+    box-shadow: 1px 1px 1px #FFF inset;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: calc(50% - 25px);
+    bottom: 5px;
+    transition: background .5s ease, left .5s ease;
+}
+#goBack:active, #goHome:active, #goLock:active {
+    background: #AAA;
+}
+.homeBtnIcon {
+    display: inline;
+    width: 35px;
+    height: 35px;
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+    -moz-filter: invert(100%);
+    -ms-filter: invert(100%);
+}
+#appList {
+    display: block;
+    max-height: calc(70% - 50px);
+    width: 80vw;
+    position: absolute;
+    left: 10vw;
+    top: calc(20% + 50px);
+    border: solid 1px #555;
+    box-shadow: 1px 1px 1px #FFF inset;
+    border-radius: 5px;
+    background: transparent;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.app {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    margin: 0;
+    padding: 5px;
+    width: calc(100% - 10px);
+    height: calc(20% - 10px);
+    color: #FFF;
+    font-size: 12pt;
+    transition: background .5s ease;
+    overflow: hidden;
+    cursor: pointer;
+}
+.app:active {
+    background: #AAA;
+}
+.appIcon {
+    display: inline;
+    height: 12pt;
+    width: 12pt;
+    margin-right: 5px;
+}
+.appTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 5px;
+    width: calc(100% - 10px);
+    height: calc(20% - 10px);
+    color: #333;
+    font-size: 12pt;
+    overflow: hidden;
+    background: rgba(255, 255, 255, .5);
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.textbox {
+    margin: 0;
+    resize: none;
+    height: auto;
+    width: calc(100% - 60px);
+    padding: 15px;
+    margin-left: 15px;
+    border: solid 1px #555;
+    outline: none;
+    box-shadow: 1px 1px 1px #FFF inset;
+    border-radius: 5px;
+    background: transparent;
+    color: #FFF;
+}
+#pack {
+    width: calc(100% - 30px);
+    height: 50px;
+    margin-left: 15px;
+    border: solid 1px #555;
+    outline: none;
+    color: #FFF;
+    background: transparent;
+    box-shadow: 1px 1px 1px #FFF inset;
+    transition: background .5s ease;
+    border-radius: 5px;
+    opacity: .7;
+    font-size: 20pt;
+    display: block;
+}
+#pack:active {
+    background: #AAA;
+}
+#creator {
+    height: calc(100% - 25px);
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    background: #333;
+    color: #FFF;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+        </style>
+    </head>
+    <body>
+        <div id="notifBar">
+            
+            <div id="clock"></div>
+        </div>
+        <div id="homeScn">
+            <div id="access">
+                <div class="accessItem" id="settings"><img src="http://www.clipartbest.com/cliparts/Rid/j76/Ridj766i9.png" class="accessIcon" /></div>
+                <div class="accessItem" id="share"><img src="http://image.flaticon.com/icons/png/512/61/61020.png" class="accessIcon" /></div>
+                <div class="accessItem" id="create"><img src="http://iconshow.me/media/images/Mixed/Free-Flat-UI-Icons/png/512/new-24-512.png" class="accessIcon" /></div>
+                <div class="accessItem" id="lock"><img src="https://cdn4.iconfinder.com/data/icons/defaulticon/icons/png/256x256/padlock-closed.png" class="accessIcon" /></div>
+            </div>
+            <div id="appList">
+                <div class="appTitle">Installed Applications</div>
+            </div>
+        </div>
+        <div id="window"></div>
+        <div id="creator">
+            <h1>App Creator</h1>
+            <p>Unique App Name:</p>
+            <textarea class='textbox' rows='1' placeholder='App Name...' id='custName' autocomplete="off" step="1"></textarea>
+            <p>App HTML:</p>
+            <textarea class='textbox' rows='5' placeholder='HTML...' id='custLayout' autocomplete="off" step="2"></textarea>
+            <p>App CSS Stylesheet:</p>
+            <textarea class='textbox' rows='5' placeholder='CSS...' id='custCss' autocomplete="off" step="3"></textarea>
+            <p>App Scripting (JS & JQuery):</p>
+            <textarea class='textbox' rows='5' placeholder='App Scripts...' id='custJS' autocomplete="off" step="4"></textarea>
+            <p>App Icon (URL):<small>Optional</small></p>
+            <textarea class='textbox' rows='1' placeholder='App Icon...' id='custIcon' autocomplete="off" step="5"></textarea>
+            <hr />
+            <br />
+            <button id='pack'>Package & Install</button>
+            <br />
+            <hr />
+        </div>
+        <div id="home"><img src="https://image.flaticon.com/icons/png/512/52/52152.png" class="homeBtnIcon" /></div>
+        <div id="homeOpt">
+            <div id="goHome"><img src="https://cdn0.iconfinder.com/data/icons/layout-and-location/24/Untitled-2-01-128.png" class="homeBtnIcon" /></div>
+            <div id="goBack"><img src="https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_close-128.png" class="homeBtnIcon" /></div>
+            <div id="goLock"><img src="https://cdn4.iconfinder.com/data/icons/defaulticon/icons/png/256x256/padlock-closed.png" class="homeBtnIcon" /></div>
+        </div>
+        <div id="lockscn">
+            <div id="clock2"></div>
+            <div id="unlock">UNLOCK DEVICE</div>
+        </div>
+        <script>
+            $(function(){
+    // Clock
+    var clock = $("#clock, #clock2");
+    setInterval(function(){
+        var d = new Date();
+        var h = d.getHours();
+        var m = d.getMinutes();
+        var median;
+        if(h > 12){
+            h -= 12;
+            median = " P.M.";
+        }
+        else {
+            median = " A.M.";
+        }
+        if(m < 10){
+            m = "0" + m;
+        }
+        else{}
+        var time = h + ":" + m + "" + median;
+        $(clock).text(time);
+    }, 500);
+    
+    // Init Boot
+    $("#creator").hide();
+    $("#window").hide();
+    $("#home").hide();
+    $("#homeOpt").hide();
+    
+    // UI Variables
+    var currentApp;
+    var data = {
+        
+    };
+    var apps = {
+        test : {
+            name : "Test",
+            layout : "<button id='test'>Hi</button>",
+            scripts : "$('#test').click(function(){alert('Hi')})",
+            styles : "#test { border: none; outline: none}",
+            icon : ""
+        }
+    };
+    
+    // UI Methods
+    function install(package){
+        var packageName = package.name;
+        packageName = packageName.toLowerCase()
+        packageName = packageName.replace(/\s/g, "_");
+        apps[packageName] = package;
+        var icon = "<img src='" + package.icon + "' class='appIcon' />";
+        var label = "<span>" + package.name + "</span>";
+        var shortcut = $("<div>");
+        shortcut = $(shortcut).addClass("app");
+        shortcut = $(shortcut).addClass("shortcut");
+        shortcut = $(shortcut).attr("name", packageName);
+        shortcut = $(shortcut).on("click", function(){
+    var app = $(this).attr("name") || false;
+        if(app){
+            open(app);
+        }
+        else{
+            // isWidget
+        }
+    })
+        shortcut = $(shortcut).html(icon + label);
+        $("#appList").append(shortcut);
+    }
+    function open(id){
+    if(id != "creator"){
+        var app = apps[id];
+        // Preload
+        var res = app.layout || "";
+        var script = app.scripts || "";
+        var style = app.styles || "";
+        style = "<style>" + style + "</style>";
+        script = "<script>" + script + "<\/script>";
+        var resource = script + style + res;
+        $("#window").html(resource);
+        // Open
+        $("#window").show();
+        $("#home").show();
+    }
+    else{
+        $("#creator").show();
+        $("#home").show();
+    }
+    }
+    function close(){
+        $("#window").hide();
+        $("#window").html("");
+        $("#creator").hide();
+        $("#home").hide();
+    }
+    function Application(name, layout, scripts, styles, icon){
+    this.build = function(){
+        var newPackage = {
+            "name" : this.name || "App 1",
+            "layout" : this.layout || "",
+            "scripts" : this.scripts || "",
+            "styles" : this.styles || "",
+            "icon" : this.icon || ""
+        };
+        install(newPackage);
+        };
+    }
+    function unlock(){
+        $("#window, #homeScn, #home, #homeOpt").css({
+            "filter" : "blur(0)",
+            "-webkit-filter" : "blur(0)",
+            "-ms-filter" : "blur(0)",
+            "-moz-filter" : "blur(0)"
+        });
+        $("#lockscn").fadeOut(500);
+    }
+    function lock(){
+        $("#window, #homeScn, #home, #homeOpt").css({
+            "filter" : "blur(10px)",
+            "-webkit-filter" : "blur(10px)",
+            "-ms-filter" : "blur(10px)",
+            "-moz-filter" : "blur(10px)"
+        });
+        $("#lockscn").fadeIn(500);
+    }
+
+    // Event Handling
+    $("#unlock").click(unlock);
+    $("#hardMenu").click(function(){
+        
+    });
+    $("#lock").click(lock);
+    $("#share").click(function(){
+        window.open("")// What should it open?
+    });
+    $("#home").click(function(){
+            $("#homeOpt").show();
+            $("#home").fadeOut(250);
+            var middle = window.innerWidth / 2;
+            middle = middle - 25;
+            var left = middle - 75;
+            var right = middle + 75;
+            $("#goHome").css({
+                "left" : left + "px"
+            });
+            $("#goLock").css({
+                "left" : right + "px"
+            });
+    });
+    $("#goBack").click(function(){
+            var middle = window.innerWidth / 2;
+            middle = middle - 25;
+            $("#goHome").css({
+                "left" : middle + "px"
+            });
+            $("#goLock").css({
+                "left" : middle + "px"
+            });
+            setTimeout(function(){
+                $("#home").show();
+                $("#homeOpt").fadeOut(250)
+            }, 500);
+    });
+    $("#goHome").click(function(){
+        $("#goBack").trigger("click");
+        setTimeout(close, 500);
+    });
+    $("#goLock").click(function(){
+        $("#goBack").trigger("click");
+        lock();
+    });
+    $("#create").click(function(){
+        open("creator");
+    });
+    $('#pack').on('click', function(){
+        var myName = $('#custName').val();
+        var myLayout = $('#custLayout').val();
+        var myStyles = $('#custCSS').val();
+        var myScripts = $('#custJS').val();
+        var myIcon = $('#custIcon').val();
+        var cust = new Application();
+        cust.name = myName;
+        cust.layout = myLayout;
+        cust.scripts = myScripts;
+        cust.styles = myStyles;
+        cust.icon = myIcon;
+        cust.build();
+        close();
+    });
+    // Exit Boot
+    
+    lock();
+    
+    /*
+        // Notes to User;
+        
+        
+    */
+    var example = new Application();
+    example.name = "The Coding Master";
+    example.layout = "<h1>The Coding Master</h1><p>Cool, right?</p><blockquote style=\"background-color: blue;border-left: 2px solid orange;color: green\">Simple blockquote</blockquote>";
+    example.icon = "";
+    example.style = "";
+    example.script = "";
+    example.build();
+    
+    /*var information = new Application();
+    information.name = "Information";
+    information.layout = "";
+    information.icon = "https://esport.uni-bayreuth.de/wp-content/themes/flatolio/images/icon_info.png";
+    information.build();*/
+});
+        </script>
+    </body>
+</html>
